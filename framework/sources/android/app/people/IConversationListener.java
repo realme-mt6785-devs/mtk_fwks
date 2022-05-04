@@ -1,0 +1,143 @@
+package android.app.people;
+
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.IInterface;
+import android.os.Parcel;
+import android.os.RemoteException;
+/* loaded from: classes.dex */
+public interface IConversationListener extends IInterface {
+    public static final String DESCRIPTOR = "android.app.people.IConversationListener";
+
+    void onConversationUpdate(ConversationChannel conversationChannel) throws RemoteException;
+
+    /* loaded from: classes.dex */
+    public static class Default implements IConversationListener {
+        @Override // android.app.people.IConversationListener
+        public void onConversationUpdate(ConversationChannel conversation) throws RemoteException {
+        }
+
+        @Override // android.os.IInterface
+        public IBinder asBinder() {
+            return null;
+        }
+    }
+
+    /* loaded from: classes.dex */
+    public static abstract class Stub extends Binder implements IConversationListener {
+        static final int TRANSACTION_onConversationUpdate = 1;
+
+        public Stub() {
+            attachInterface(this, IConversationListener.DESCRIPTOR);
+        }
+
+        public static IConversationListener asInterface(IBinder obj) {
+            if (obj == null) {
+                return null;
+            }
+            IInterface iin = obj.queryLocalInterface(IConversationListener.DESCRIPTOR);
+            if (iin == null || !(iin instanceof IConversationListener)) {
+                return new Proxy(obj);
+            }
+            return (IConversationListener) iin;
+        }
+
+        @Override // android.os.IInterface
+        public IBinder asBinder() {
+            return this;
+        }
+
+        public static String getDefaultTransactionName(int transactionCode) {
+            switch (transactionCode) {
+                case 1:
+                    return "onConversationUpdate";
+                default:
+                    return null;
+            }
+        }
+
+        @Override // android.os.Binder
+        public String getTransactionName(int transactionCode) {
+            return getDefaultTransactionName(transactionCode);
+        }
+
+        @Override // android.os.Binder
+        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+            ConversationChannel _arg0;
+            switch (code) {
+                case IBinder.INTERFACE_TRANSACTION /* 1598968902 */:
+                    reply.writeString(IConversationListener.DESCRIPTOR);
+                    return true;
+                default:
+                    switch (code) {
+                        case 1:
+                            data.enforceInterface(IConversationListener.DESCRIPTOR);
+                            if (data.readInt() != 0) {
+                                _arg0 = ConversationChannel.CREATOR.createFromParcel(data);
+                            } else {
+                                _arg0 = null;
+                            }
+                            onConversationUpdate(_arg0);
+                            return true;
+                        default:
+                            return super.onTransact(code, data, reply, flags);
+                    }
+            }
+        }
+
+        /* JADX INFO: Access modifiers changed from: private */
+        /* loaded from: classes.dex */
+        public static class Proxy implements IConversationListener {
+            public static IConversationListener sDefaultImpl;
+            private IBinder mRemote;
+
+            Proxy(IBinder remote) {
+                this.mRemote = remote;
+            }
+
+            @Override // android.os.IInterface
+            public IBinder asBinder() {
+                return this.mRemote;
+            }
+
+            public String getInterfaceDescriptor() {
+                return IConversationListener.DESCRIPTOR;
+            }
+
+            @Override // android.app.people.IConversationListener
+            public void onConversationUpdate(ConversationChannel conversation) throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                try {
+                    _data.writeInterfaceToken(IConversationListener.DESCRIPTOR);
+                    if (conversation != null) {
+                        _data.writeInt(1);
+                        conversation.writeToParcel(_data, 0);
+                    } else {
+                        _data.writeInt(0);
+                    }
+                    boolean _status = this.mRemote.transact(1, _data, null, 1);
+                    if (!_status && Stub.getDefaultImpl() != null) {
+                        Stub.getDefaultImpl().onConversationUpdate(conversation);
+                    }
+                } finally {
+                    _data.recycle();
+                }
+            }
+        }
+
+        public static boolean setDefaultImpl(IConversationListener impl) {
+            if (Proxy.sDefaultImpl != null) {
+                throw new IllegalStateException("setDefaultImpl() called twice");
+            } else if (impl == null) {
+                return false;
+            } else {
+                Proxy.sDefaultImpl = impl;
+                return true;
+            }
+        }
+
+        public static IConversationListener getDefaultImpl() {
+            return Proxy.sDefaultImpl;
+        }
+    }
+}
